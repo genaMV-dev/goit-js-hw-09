@@ -1,11 +1,13 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const STORAGE_KEY = "feedback-form-state";
-  const form = document.querySelector(".feedback-form");
+const STORAGE_KEY = "feedback-form-state";
 
-  let formData = {
-    email: "",
-    message: "",
-  };
+
+let formData = {
+  email: "",
+  message: "",
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector(".feedback-form");
 
   
   const savedData = localStorage.getItem(STORAGE_KEY);
