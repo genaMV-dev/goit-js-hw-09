@@ -1,40 +1,62 @@
-const STORAGE_KEY = `feedback-form-state`;
+const STORAGE_KEY = "feedback-form-state";
 
-const form = document.querySelector(`.feedback-form`);
-const textarea = document.querySelector(`textarea`);
-
-form.addEventListener(`input`, (e)=>{
-    const formData = new FormData(form);
-
-    const obj = {
-        email: formData.get(`email`),
-        message: formData.get(`message`)
-    }
-
-    const zip = JSON.stringify(obj);
-
-    localStorage.setItem(STORAGE_KEY, zip);
-})
-
-document.addEventListener(`DOMContentLoaded`, (e)=>{
-    const zip = localStorage.getItem(STORAGE_KEY);
-    const data = JSON.parse(zip);
-    form.elements.email.value = data.email;
-    form.elements.message.value = data.message;
-})
-
-form.addEventListener(`submit`, (e)=>{
-    e.preventDefault();
-
-    const formData = new FormData(form);
-
-    const obj = {
-        email: formData.get(`email`),
-        message: formData.get(`message`)
-    }
+const form = document.querySelector(".feedback-form");
 
 
-    console.log(obj);
-    localStorage.removeItem(STORAGE_KEY);
-    form.reset()
-})
+let formData = {
+  email: "",
+  message: "",
+};
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedData = localStorage.getItem(STORAGE_KEY);
+
+  if (!savedData) return;
+
+  try {
+    formData = JSON.parse(savedData);
+
+    form.elements.email.value = formData.email || "";
+    form.elements.message.value = formData.message || "";
+  } catch (error) {
+    console.error("Invalid data in localStorage");
+  }
+});
+
+
+form.addEventListener("input", (e) => {
+  const { name, value } = e.target;
+
+  if (!formData.hasOwnProperty(name)) return;
+
+  formData[name] = value;
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+});
+
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const { email, message } = formData;
+
+  if (!email.trim() || !message.trim()) {
+    alert("Fill please all fields");
+    return;
+  }
+
+  console.log(formData);
+
+  
+  localStorage.removeItem(STORAGE_KEY);
+
+  
+  formData = {
+    email: "",
+    message: "",
+  };
+
+  
+  form.reset();
+});
