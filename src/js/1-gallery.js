@@ -91,7 +91,11 @@ document.addEventListener(`DOMContentLoaded`, () => {
     const markup = imagesTemplate(images);
     ulGallery.innerHTML = markup;
 
-    let gallery = new SimpleLightbox('.gallery a');
+    let gallery = new SimpleLightbox('.gallery a', {
+		captions: true,
+		captionsData: 'alt',
+		captionDelay: 250,
+	});
 })
 
 
